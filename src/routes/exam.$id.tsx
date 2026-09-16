@@ -6,7 +6,7 @@ import type { ExamQuestion, ExamSectionId } from "@/data/types";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useProgress } from "@/lib/progress";
-import { speakJapanese, stopSpeaking } from "@/lib/speech";
+import { speakJapanese, speakSequence, stopSpeaking } from "@/lib/speech";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/exam/$id")({
@@ -27,11 +27,77 @@ function ExamNotFound() {
 
 type Phase = "intro" | "live" | "result";
 
+const DEFAULT_PART_HINT: Record<string, string> = {
+  漢字読み: "______ の ことばは ひらがなで どう かきますか。1・2・3・4から いちばん いい ものを ひとつ えらんでください。",
+  表記: "______ の ことばは どう かきますか。1・2・3・4から いちばん いい ものを ひとつ えらんでください。",
+  "問題1 読み": "______ の ことばは ひらがなで どう かきますか。1・2・3・4から いちばん いい ものを ひとつ えらんでください。",
+  "問題2 表記": "______ の ことばは どう かきますか。1・2・3・4から いちばん いい ものを ひとつ えらんでください。",
+  "問題3 文脈規定": "（　）に なにを いれますか。1・2・3・4から いちばん いい ものを ひとつ えらんでください。",
+  "問題4 言い換え": "______ の ぶんと だいたい おなじ いみの ぶんが あります。1・2・3・4から いちばん いい ものを ひとつ えらんでください。",
+  "問題5 用法": "つぎの ことばを つかった ぶんとして いちばん いい ものを ひとつ えらんでください。",
+  "文の文法1": "（　）に なにを いれますか。1・2・3・4から いちばん いい ものを ひとつ えらんでください。",
+  "文の文法2": "★ に はいる ものは どれですか。",
+  "問題1 文の文法": "（　）に なにを いれますか。1・2・3・4から いちばん いい ものを ひとつ えらんでください。",
+  "問題2 並べ替え": "正しい文になるように並べたとき、★ に入るものはどれですか。",
+  "問題3 文章の文法": "次の文を読んで、（　）に入るものを選んでください。",
+  短文: "つぎの ぶんを 読んで、しつもんに こたえてください。",
+  中文: "つぎの ぶんを 読んで、しつもんに こたえてください。",
+  情報検索: "つぎの あんないを 見て、しつもんに こたえてください。",
+  "問題4 短文": "つぎの ぶんを 読んで、しつもんに こたえてください。",
+  "問題5 中文": "つぎの ぶんを 読んで、しつもんに こたえてください。",
+  "問題6 情報検索": "つぎの あんないを 見て、しつもんに こたえてください。",
+  課題理解: "もんだいを きいて、ただしい こたえを えらんでください。会話は にかい 流れます。",
+  ポイント理解: "もんだいを きいて、ポイントを こたえてください。会話は にかい 流れます。",
+  即時応答: "へんじとして いちばん いい ものを えらんでください。",
+  "問題1 課題理解": "もんだいを きいて、ただしい こたえを えらんでください。会話は にかい 流れます。",
+  "問題2 ポイント理解": "もんだいを きいて、ポイントを こたえてください。会話は にかい 流れます。",
+  "問題3 発話表現": "なにと いいますか。1・2・3から いちばん いい ものを ひとつ えらんでください。",
+  "問題4 即時応答": "へんじとして いちばん いい ものを えらんでください。1・2・3から ひとつ。",
+};
+
+type Item = { q: ExamQuestion; index: number };
+type Block = { passage?: string; items: Item[] };
+type PartGroup = { part: string; instruction?: string; blocks: Block[] };
+
+function groupQuestions(questions: ExamQuestion[]): PartGroup[] {
+  const groups: PartGroup[] = [];
+  questions.forEach((q, index) => {
+    const last = groups[groups.length - 1];
+    const hint = q.instruction ?? DEFAULT_PART_HINT[q.part];
+    if (!last || last.part !== q.part) {
+      groups.push({
+        part: q.part,
+        instruction: hint,
+        blocks: [{ passage: q.passage, items: [{ q, index }] }],
+      });
+      return;
+    }
+    if (!last.instruction && hint) last.instruction = hint;
+    const lastBlock = last.blocks[last.blocks.length - 1];
+    if (lastBlock && (lastBlock.passage ?? "") === (q.passage ?? "")) {
+      lastBlock.items.push({ q, index });
+    } else {
+      last.blocks.push({ passage: q.passage, items: [{ q, index }] });
+    }
+  });
+  return groups;
+}
+
+function playExamAudio(audio: string) {
+  const parts = audio
+    .split(/(?=男：|女：|店員：|社員：|先生：|学生：)/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (parts.length > 1) speakSequence(parts, 0.86, 480);
+  else speakJapanese(audio, 0.86);
+}
+
 function ExamPage() {
   const { id } = Route.useParams();
   const found = getExam(id);
   if (!found) throw notFound();
   const exam = found;
+  const official = exam.format === "official";
 
   const saveExam = useProgress((s) => s.saveExam);
   const [phase, setPhase] = useState<Phase>("intro");
@@ -48,6 +114,10 @@ function ExamPage() {
   );
   const section = exam.sections.find((s) => s.id === sectionId) ?? exam.sections[0];
   const answeredCount = allQuestions.filter((q) => answers[q.id]).length;
+  const groups = useMemo(
+    () => (section ? groupQuestions(section.questions) : []),
+    [section],
+  );
 
   useEffect(() => {
     if (phase !== "live") return;
@@ -88,9 +158,20 @@ function ExamPage() {
           <ArrowLeft className="size-4" />
           全部試卷
         </Link>
-        <p className="text-xs tracking-wide text-primary">{exam.level} MOCK</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-xs tracking-wide text-primary">{exam.level} MOCK</p>
+          <span className="rounded-full bg-primary-soft px-2.5 py-0.5 text-xs text-primary">
+            {official ? "真題形式 85題・110分" : "練習短縮"}
+          </span>
+        </div>
         <h1 className="mt-1 font-display text-3xl text-ink sm:text-4xl">{exam.title}</h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{exam.subtitle}</p>
+
+        {official ? (
+          <div className="mt-4 rounded-xl border border-border bg-surface px-4 py-3 text-sm leading-relaxed text-muted">
+            對齊正式 N4：言語知識（文字・語彙）28 題、文法 21 題、読解 8 題（75 分），聴解 28 題（35 分）。題目為原創，沒有抄錄真題。聴解問題 3・4 只有三個選項。
+          </div>
+        ) : null}
 
         <ul className="mt-6 grid gap-2 sm:grid-cols-2">
           {exam.sections.map((s) => (
@@ -126,6 +207,7 @@ function ExamPage() {
     const reviewList = reviewWrong
       ? allQuestions.filter((q) => answers[q.id] !== q.answer)
       : allQuestions;
+    const reviewGroups = groupQuestions(reviewList);
     return (
       <div>
         <div className="paper-card rounded-2xl p-6 text-center sm:p-8">
@@ -169,52 +251,62 @@ function ExamPage() {
           </div>
         </div>
 
-        <ol className="mt-6 space-y-4">
-          {reviewList.map((q, i) => {
-            const given = answers[q.id];
-            const ok = given === q.answer;
-            return (
-              <li key={q.id} className="paper-card rounded-xl p-4">
-                <div className="flex items-start gap-2">
-                  {ok ? (
-                    <Check className="mt-0.5 size-4 shrink-0 text-success" />
-                  ) : (
-                    <X className="mt-0.5 size-4 shrink-0 text-danger" />
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs text-subtle">
-                      {q.part} · {i + 1}
-                    </p>
-                    <p className="mt-1 text-sm text-ink">{q.prompt}</p>
-                    {q.passage ? (
-                      <p className="mt-2 whitespace-pre-wrap rounded-lg bg-bg-deep/70 px-3 py-2 font-display text-sm text-ink">
-                        {q.passage}
-                      </p>
-                    ) : null}
-                    {q.audio ? (
-                      <button
-                        type="button"
-                        className="mt-2 inline-flex h-9 items-center gap-1.5 text-sm text-primary"
-                        onClick={() => speakJapanese(q.audio ?? "", 0.86)}
-                      >
-                        <Volume2 className="size-4" />
-                        再聽
-                      </button>
-                    ) : null}
-                    <p className="mt-2 text-sm">
-                      <span className="text-muted">你的答案：</span>
-                      {given ?? "（未作答）"}
-                    </p>
-                    {!ok ? (
-                      <p className="text-sm text-success">正確：{q.answer}</p>
-                    ) : null}
-                    <p className="mt-1 text-xs text-muted">{q.explanation}</p>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+        <div className="mt-6 space-y-6">
+          {reviewGroups.map((g) => (
+            <section key={g.part}>
+              <p className="mb-3 text-xs tracking-wide text-primary">{g.part}</p>
+              <ol className="space-y-4">
+                {g.blocks.flatMap((b) =>
+                  b.items.map(({ q, index }) => {
+                    const given = answers[q.id];
+                    const ok = given === q.answer;
+                    return (
+                      <li key={q.id} className="paper-card rounded-xl p-4">
+                        <div className="flex items-start gap-2">
+                          {ok ? (
+                            <Check className="mt-0.5 size-4 shrink-0 text-success" />
+                          ) : (
+                            <X className="mt-0.5 size-4 shrink-0 text-danger" />
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs text-subtle">問 {index + 1}</p>
+                            <p className="mt-1 text-sm text-ink">{q.prompt}</p>
+                            {q.promptJp ? (
+                              <p className="mt-1 font-display text-base text-primary">{q.promptJp}</p>
+                            ) : null}
+                            {q.passage ? (
+                              <p className="mt-2 whitespace-pre-wrap rounded-lg bg-bg-deep/70 px-3 py-2 font-display text-sm text-ink">
+                                {q.passage}
+                              </p>
+                            ) : null}
+                            {q.audio ? (
+                              <button
+                                type="button"
+                                className="mt-2 inline-flex h-9 items-center gap-1.5 text-sm text-primary"
+                                onClick={() => playExamAudio(q.audio ?? "")}
+                              >
+                                <Volume2 className="size-4" />
+                                再聽
+                              </button>
+                            ) : null}
+                            <p className="mt-2 text-sm">
+                              <span className="text-muted">你的答案：</span>
+                              {given ?? "（未作答）"}
+                            </p>
+                            {!ok ? (
+                              <p className="text-sm text-success">正確：{q.answer}</p>
+                            ) : null}
+                            <p className="mt-1 text-xs text-muted">{q.explanation}</p>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  }),
+                )}
+              </ol>
+            </section>
+          ))}
+        </div>
       </div>
     );
   }
@@ -273,25 +365,47 @@ function ExamPage() {
       </div>
 
       {section ? (
-        <div className="space-y-5">
+        <div className="space-y-8">
           <p className="text-sm text-muted">{section.hint}</p>
-          {section.questions.map((q, i) => (
-            <QuestionCard
-              key={q.id}
-              index={i}
-              question={q}
-              value={answers[q.id]}
-              fill={fills[q.id] ?? ""}
-              plays={plays[q.id] ?? 0}
-              onFill={(v) => setFills((prev) => ({ ...prev, [q.id]: v }))}
-              onChoose={(v) => choose(q, v)}
-              onPlay={() => {
-                const n = plays[q.id] ?? 0;
-                if (n >= 2 || !q.audio) return;
-                setPlays((prev) => ({ ...prev, [q.id]: n + 1 }));
-                speakJapanese(q.audio, 0.86);
-              }}
-            />
+          {groups.map((g) => (
+            <section key={g.part} className="space-y-3">
+              <header className="rounded-xl border border-border bg-surface px-4 py-3">
+                <p className="font-display text-xl text-ink">{g.part}</p>
+                {g.instruction ? (
+                  <p className="mt-2 border-t border-border pt-2 text-sm leading-relaxed text-muted">
+                    {g.instruction}
+                  </p>
+                ) : null}
+              </header>
+              {g.blocks.map((b, bi) => (
+                <div key={`${g.part}-${bi}`} className="space-y-3">
+                  {b.passage ? (
+                    <div className="whitespace-pre-wrap rounded-xl border border-border bg-bg-deep/70 px-4 py-3 font-display text-base leading-relaxed text-ink">
+                      {b.passage}
+                    </div>
+                  ) : null}
+                  {b.items.map(({ q, index }) => (
+                    <QuestionCard
+                      key={q.id}
+                      number={index + 1}
+                      question={q}
+                      hidePassage
+                      value={answers[q.id]}
+                      fill={fills[q.id] ?? ""}
+                      plays={plays[q.id] ?? 0}
+                      onFill={(v) => setFills((prev) => ({ ...prev, [q.id]: v }))}
+                      onChoose={(v) => choose(q, v)}
+                      onPlay={() => {
+                        const n = plays[q.id] ?? 0;
+                        if (n >= 2 || !q.audio) return;
+                        setPlays((prev) => ({ ...prev, [q.id]: n + 1 }));
+                        playExamAudio(q.audio);
+                      }}
+                    />
+                  ))}
+                </div>
+              ))}
+            </section>
           ))}
         </div>
       ) : null}
@@ -300,34 +414,34 @@ function ExamPage() {
 }
 
 function QuestionCard({
-  index,
+  number,
   question,
   value,
   fill,
   plays,
+  hidePassage,
   onFill,
   onChoose,
   onPlay,
 }: {
-  index: number;
+  number: number;
   question: ExamQuestion;
   value?: string;
   fill: string;
   plays: number;
+  hidePassage?: boolean;
   onFill: (v: string) => void;
   onChoose: (v: string) => void;
   onPlay: () => void;
 }) {
   return (
     <article className="paper-card rounded-xl p-4 sm:p-5">
-      <p className="text-xs text-subtle">
-        {question.part} · {index + 1}
-      </p>
+      <p className="text-xs tabular-nums text-subtle">問 {number}</p>
       <p className="mt-2 text-sm leading-relaxed text-ink">{question.prompt}</p>
       {question.promptJp ? (
         <p className="mt-1 font-display text-lg text-primary">{question.promptJp}</p>
       ) : null}
-      {question.passage ? (
+      {!hidePassage && question.passage ? (
         <p className="mt-3 whitespace-pre-wrap rounded-lg bg-bg-deep/70 px-3 py-3 font-display text-base leading-relaxed text-ink">
           {question.passage}
         </p>
@@ -364,7 +478,7 @@ function QuestionCard({
         </form>
       ) : (
         <div className="mt-3 grid gap-2">
-          {question.options.map((option) => {
+          {question.options.map((option, i) => {
             const on = value === option;
             return (
               <button
@@ -378,6 +492,7 @@ function QuestionCard({
                     : "border-border bg-surface hover:bg-primary-soft/40",
                 )}
               >
+                <span className="mr-2 inline-block min-w-4 tabular-nums text-subtle">{i + 1}</span>
                 {option}
               </button>
             );

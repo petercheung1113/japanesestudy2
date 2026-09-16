@@ -5,8 +5,9 @@ export const examN43: MockExam = {
   level: "N4",
   title: "N4 模擬試 第 3 回",
   subtitle:
-    "第三回 N4 綜合模擬。含可能・意向・受身・使役・樣態傳聞・てしまう／ておく・ば／のに・敬語。",
+    "短縮練習（約41題・95分）。第三回 N4 綜合模擬。含可能・意向・受身・使役・樣態傳聞・てしまう／ておく・ば／のに・敬語。",
   timeMinutes: 95,
+  format: "practice",
   sections: [
     {
       id: "vocab",

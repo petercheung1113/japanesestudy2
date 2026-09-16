@@ -102,7 +102,7 @@ function Home() {
             <p className="text-xs font-medium tracking-wide text-primary">模擬試</p>
             <p className="mt-1 font-display text-2xl text-ink">N5／N4 試卷</p>
             <p className="mt-1 text-sm text-muted">
-              {MOCK_EXAMS.length} 回 · 語彙・文法・讀解・聽解
+              {MOCK_EXAMS.length} 回 · 含 N4 真題形式 85 題
             </p>
           </div>
           <span className="grid size-11 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">
@@ -183,7 +183,7 @@ function Home() {
         <Feature icon={ListChecks} title="練習" text="選擇、是非、填空即時回饋" />
         <Feature icon={Headphones} title="聽解" text="播放對話後選答" />
         <Feature icon={MessageSquareText} title="文章" text="原創對話與理解題" />
-        <Feature icon={ClipboardCheck} title="模擬試" text="N5／N4 四部份計時" />
+        <Feature icon={ClipboardCheck} title="模擬試" text="N4 真題形式 85 題・110 分" />
       </section>
     </div>
   );

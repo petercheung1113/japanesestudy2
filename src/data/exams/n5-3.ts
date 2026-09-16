@@ -7,6 +7,7 @@ export const examN53: MockExam = {
   subtitle:
     "第三回綜合模擬。範圍《大家的日本語》初級1第1–25課：文字語彙、文法、讀解、聽解。",
   timeMinutes: 80,
+  format: "practice",
   sections: [
     {
       id: "vocab",

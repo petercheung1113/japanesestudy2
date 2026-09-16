@@ -6,6 +6,7 @@ export const examN52: MockExam = {
   title: "N5 模擬試 第 2 回",
   subtitle: "第二回綜合模擬。範圍同第 1 回，題型為文字語彙、文法、讀解、聽解。",
   timeMinutes: 80,
+  format: "practice",
   sections: [
     {
       id: "vocab",

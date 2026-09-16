@@ -4,8 +4,9 @@ export const examN41: MockExam = {
   id: "n4-1",
   level: "N4",
   title: "N4 模擬試 第 1 回",
-  subtitle: "在 N5 基礎上加入可能・受身・使役・樣態傳聞・條件與敬語入門的綜合模擬。",
+  subtitle: "短縮練習（約41題・95分）。在 N5 基礎上加入可能・受身・使役・樣態傳聞・條件與敬語入門。",
   timeMinutes: 95,
+  format: "practice",
   sections: [
     {
       id: "vocab",

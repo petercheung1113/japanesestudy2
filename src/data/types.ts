@@ -174,6 +174,8 @@ export interface ExamQuestion {
   options: string[];
   answer: string;
   explanation: string;
+  /** Shown once at the start of a もんだい part */
+  instruction?: string;
 }
 
 export interface ExamSection {
@@ -190,5 +192,7 @@ export interface MockExam {
   title: string;
   subtitle: string;
   timeMinutes: number;
+  /** practice = shortened training; official = real N4 問題 types, 85 Q, 110 min */
+  format?: "practice" | "official";
   sections: ExamSection[];
 }

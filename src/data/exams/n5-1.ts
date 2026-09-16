@@ -6,6 +6,7 @@ export const examN51: MockExam = {
   title: "N5 模擬試 第 1 回",
   subtitle: "對應大家的日本語初級 1（第 1–25 課）：文字語彙、文法、短文讀解與聽解綜合模擬。",
   timeMinutes: 80,
+  format: "practice",
   sections: [
     {
       id: "vocab",
