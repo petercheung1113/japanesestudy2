@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/lesson/14?s=listen",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "みんな教室",
+      "hasCanvas": false,
+      "bodyTextLen": 509,
+      "bodyTextHash": "991db9c9bffa5c717abc425fd9adac3010acd3a4bf46504bb67d79edb5aa9e8a",
+      "bodyTextPrefix": "み みんな教室 大家的日本語 · N5／N4 課程 假名 複習 試卷 全部課程 第 14 課 ちょっと 待って ください 請稍等",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/lesson14-listen-smoke.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "みんな教室",
+      "hasCanvas": false,
+      "bodyTextLen": 477,
+      "bodyTextHash": "8e88ef904aa02531fd315e77244b19ef54b6530edd3932a9394b4253bccf25f7",
+      "bodyTextPrefix": "み みんな教室 大家的日本語 · N5／N4 全部課程 第 14 課 ちょっと 待って ください 請稍等一下 · て形・依頼・進",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/lesson14-listen-smoke-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/lesson14-listen-smoke.json"
+}

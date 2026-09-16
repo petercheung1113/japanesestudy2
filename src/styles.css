@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f3eee4;
+  --color-bg-deep: #ebe4d6;
+  --color-surface: #faf7f0;
+  --color-surface-2: #f6f1e7;
+  --color-ink: #1c1916;
+  --color-fg: #1c1916;
+  --color-muted: #6b645c;
+  --color-subtle: #8a8278;
+  --color-primary: #2e4a62;
+  --color-primary-fg: #faf7f0;
+  --color-primary-soft: #e4ebf2;
+  --color-border: #e0d7c8;
+  --color-border-strong: #cfc4b1;
+  --color-success: #3d6b4f;
+  --color-success-soft: #e5efe8;
+  --color-danger: #8b3a32;
+  --color-danger-soft: #f3e4e1;
+  --color-warn: #7a5a2e;
+  --color-warn-soft: #f3ead8;
+
+  --font-sans: "IBM Plex Sans JP", "Noto Sans JP", "PingFang TC", "Noto Sans TC",
+    system-ui, sans-serif;
+  --font-display: "Shippori Mincho", "Noto Serif JP", "Songti TC", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+
+  --shadow-soft: 0 1px 2px rgb(28 25 22 / 0.04), 0 8px 24px rgb(28 25 22 / 0.05);
+  --shadow-lift: 0 2px 8px rgb(28 25 22 / 0.06), 0 16px 40px rgb(28 25 22 / 0.07);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background:
+      radial-gradient(1200px 600px at 12% -10%, rgb(46 74 98 / 0.06), transparent 55%),
+      radial-gradient(900px 500px at 110% 0%, rgb(61 107 79 / 0.05), transparent 50%),
+      var(--color-bg);
+    min-height: 100dvh;
+    color: var(--color-fg);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-primary) 22%, white);
+    color: var(--color-ink);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 400ms var(--ease-out) both;
+}
+
+.paper-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+}
+
+.seal {
+  font-family: var(--font-display);
+  display: grid;
+  place-items: center;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "みんな教室",
+      "hasCanvas": false,
+      "bodyTextLen": 1531,
+      "bodyTextHash": "4b1e5a4cb8f089078136596238a86d2d4e4a8a97de6a908fdd1092d8abe644c2",
+      "bodyTextPrefix": "み みんな教室 大家的日本語 · N5／N4 課程 假名 複習 試卷 MINNA CLASSROOM 初級日語，按課走完。 對應",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "みんな教室",
+      "hasCanvas": false,
+      "bodyTextLen": 1531,
+      "bodyTextHash": "6337e7d4ed6a1121b6ef87ee8fe62abe52e57015d507a477722a2fee0667441e",
+      "bodyTextPrefix": "み みんな教室 大家的日本語 · N5／N4 MINNA CLASSROOM 初級日語，按課走完。 對應《大家的日本語》初級第 ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

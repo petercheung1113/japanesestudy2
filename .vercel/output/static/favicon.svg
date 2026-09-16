@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="みんな教室">
+  <rect width="64" height="64" rx="14" fill="#F3EEE4"/>
+  <circle cx="32" cy="32" r="22" fill="#2E4A62"/>
+  <path d="M30.5 16.5 C28.2 20.2 26.2 26.5 24.6 33.5 C23.6 38.2 21.2 42.8 17.5 46.5" fill="none" stroke="#FAF7F0" stroke-width="4.2" stroke-linecap="round"/>
+  <path d="M25.2 26.8 L46.5 46.2" fill="none" stroke="#FAF7F0" stroke-width="4.2" stroke-linecap="round"/>
+</svg>
