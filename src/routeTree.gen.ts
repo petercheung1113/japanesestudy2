@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ExamRouteImport } from './routes/exam'
 import { Route as N4RouteImport } from './routes/n4'
+import { Route as RefRouteImport } from './routes/ref'
 import { Route as ReviewRouteImport } from './routes/review'
 import { Route as StartRouteImport } from './routes/start'
 import { Route as ExamIndexRouteImport } from './routes/exam.index'
@@ -32,6 +33,11 @@ const ExamRoute = ExamRouteImport.update({
 const N4Route = N4RouteImport.update({
   id: '/n4',
   path: '/n4',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefRoute = RefRouteImport.update({
+  id: '/ref',
+  path: '/ref',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReviewRoute = ReviewRouteImport.update({
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/exam': typeof ExamRouteWithChildren
   '/n4': typeof N4Route
+  '/ref': typeof RefRoute
   '/review': typeof ReviewRoute
   '/start': typeof StartRoute
   '/exam/$id': typeof ExamIdRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/n4': typeof N4Route
+  '/ref': typeof RefRoute
   '/review': typeof ReviewRoute
   '/start': typeof StartRoute
   '/exam/$id': typeof ExamIdRoute
@@ -91,6 +99,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/exam': typeof ExamRouteWithChildren
   '/n4': typeof N4Route
+  '/ref': typeof RefRoute
   '/review': typeof ReviewRoute
   '/start': typeof StartRoute
   '/exam/$id': typeof ExamIdRoute
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
     | '/'
     | '/exam'
     | '/n4'
+    | '/ref'
     | '/review'
     | '/start'
     | '/exam/$id'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/n4'
+    | '/ref'
     | '/review'
     | '/start'
     | '/exam/$id'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
     | '/'
     | '/exam'
     | '/n4'
+    | '/ref'
     | '/review'
     | '/start'
     | '/exam/$id'
@@ -137,6 +149,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExamRoute: typeof ExamRouteWithChildren
   N4Route: typeof N4Route
+  RefRoute: typeof RefRoute
   ReviewRoute: typeof ReviewRoute
   StartRoute: typeof StartRoute
   LessonIdRoute: typeof LessonIdRoute
@@ -164,6 +177,13 @@ declare module '@tanstack/react-router' {
       path: '/n4'
       fullPath: '/n4'
       preLoaderRoute: typeof N4RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ref': {
+      id: '/ref'
+      path: '/ref'
+      fullPath: '/ref'
+      preLoaderRoute: typeof RefRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/review': {
@@ -227,6 +247,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExamRoute: ExamRouteWithChildren,
   N4Route: N4Route,
+  RefRoute: RefRoute,
   ReviewRoute: ReviewRoute,
   StartRoute: StartRoute,
   LessonIdRoute: LessonIdRoute,

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/ref",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "みんな教室",
+      "hasCanvas": false,
+      "bodyTextLen": 1514,
+      "bodyTextHash": "0d41d801381754cd81b41538bc072ee0b8249e2d2ed151889d12c45b673961ee",
+      "bodyTextPrefix": "み みんな教室 大家的日本語 · N5／N4 課程 假名 資料 複習 試卷 REFERENCE 補充資料 報時、月份、日期、錢、",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/ref-page.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "みんな教室",
+      "hasCanvas": false,
+      "bodyTextLen": 1514,
+      "bodyTextHash": "fbcdce4a38a4f5b9c568bd476189f64e9ddefcc3a24d07591b9fce229e73013f",
+      "bodyTextPrefix": "み みんな教室 大家的日本語 · N5／N4 REFERENCE 補充資料 報時、月份、日期、錢、星期，以及第一／二／三類動詞的",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/ref-page-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/ref-page.json"
+}

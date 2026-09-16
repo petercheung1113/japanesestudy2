@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, ClipboardList, House, Languages, RotateCcw } from "lucide-react";
+import { BookMarked, BookOpen, ClipboardList, House, Languages, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/", label: "課程", icon: House, match: "home" },
   { to: "/start", label: "假名", icon: Languages, match: "start" },
+  { to: "/ref", label: "資料", icon: BookMarked, match: "ref" },
   { to: "/review", label: "複習", icon: RotateCcw, match: "review" },
   { to: "/exam", label: "試卷", icon: ClipboardList, match: "exam" },
 ] as const;
@@ -37,7 +38,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   key={item.to}
                   to={item.to}
                   className={cn(
-                    "inline-flex h-10 items-center gap-2 rounded-md px-3 text-sm transition-colors duration-150",
+                    "inline-flex h-10 items-center gap-2 rounded-md px-2.5 text-sm transition-colors duration-150 lg:px-3",
                     active
                       ? "bg-primary-soft text-primary"
                       : "text-muted hover:bg-bg-deep hover:text-ink",
@@ -54,8 +55,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <main className="flex-1 px-4 pb-24 pt-5 sm:pb-10">{children}</main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-surface/95 px-2 py-2 backdrop-blur-md sm:hidden">
-        <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
+      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-surface/95 px-1 py-2 backdrop-blur-md sm:hidden">
+        <div className="mx-auto grid max-w-md grid-cols-5 gap-0.5">
           {NAV.map((item) => {
             const active =
               item.match === "home" ? pathname === "/" || isLesson : pathname.startsWith(item.to);
@@ -64,11 +65,11 @@ export function AppShell({ children }: { children: ReactNode }) {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "flex h-12 flex-col items-center justify-center gap-0.5 rounded-md text-xs",
+                  "flex h-12 flex-col items-center justify-center gap-0.5 rounded-md text-[11px]",
                   active ? "bg-primary-soft text-primary" : "text-muted",
                 )}
               >
-                <item.icon className="size-5" />
+                <item.icon className="size-4" />
                 {item.label}
               </Link>
             );

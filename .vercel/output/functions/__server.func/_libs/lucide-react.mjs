@@ -108,6 +108,19 @@ var ArrowRight = createLucideIcon("arrow-right", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var BookMarked = createLucideIcon("book-marked", [["path", {
+	d: "M10 2v8l3-3 3 3V2",
+	key: "sqw3rj"
+}], ["path", {
+	d: "M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20",
+	key: "k3hazp"
+}]]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var BookOpenText = createLucideIcon("book-open-text", [
 	["path", {
 		d: "M12 7v14",
@@ -512,4 +525,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { ChevronDown as _, RotateCcw as a, ArrowRight as b, MessageSquareText as c, LayoutGrid as d, Languages as f, ClipboardCheck as g, ClipboardList as h, SpellCheck as i, List as l, Headphones as m, Volume2 as n, PenLine as o, House as p, TriangleAlert as r, Pause as s, X as t, ListChecks as u, Check as v, ArrowLeft as x, BookOpenText as y };
+export { ArrowLeft as S, ChevronDown as _, RotateCcw as a, BookMarked as b, MessageSquareText as c, LayoutGrid as d, Languages as f, ClipboardCheck as g, ClipboardList as h, SpellCheck as i, List as l, Headphones as m, Volume2 as n, PenLine as o, House as p, TriangleAlert as r, Pause as s, X as t, ListChecks as u, Check as v, ArrowRight as x, BookOpenText as y };

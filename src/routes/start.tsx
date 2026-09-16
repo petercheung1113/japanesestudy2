@@ -124,6 +124,18 @@ function StartPage() {
         </div>
       </Section>
 
+      <Link
+        to="/ref"
+        className="paper-card mb-8 flex items-center justify-between gap-4 rounded-2xl p-5 transition-[transform,box-shadow] duration-200 hover:shadow-lift"
+      >
+        <div>
+          <p className="text-xs font-medium tracking-wide text-primary">補充資料</p>
+          <p className="mt-1 font-display text-2xl text-ink">時刻・月日・錢・動詞活用</p>
+          <p className="mt-1 text-sm text-muted">一點到十二點、一分到五十九分、一至十二月、1–31 日、百千萬円、星期、一二三類動詞轉變</p>
+        </div>
+        <span className="text-sm text-primary">打開</span>
+      </Link>
+
       <Section title="登場人物" kicker="だれが でますか">
         <div className="grid gap-2 sm:grid-cols-2">
           {CHARACTERS.map((person) => (
@@ -145,13 +157,21 @@ function StartPage() {
 
       <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">
         <p className="text-sm text-muted">音抓好了，從第 1 課開始判斷句。</p>
-        <Link
-          to="/lesson/$id"
-          params={{ id: "1" }}
-          className="inline-flex h-11 items-center rounded-md bg-primary px-4 text-sm text-primary-fg"
-        >
-          進入第 1 課
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            to="/ref"
+            className="inline-flex h-11 items-center rounded-md border border-border bg-surface px-4 text-sm text-ink"
+          >
+            補充資料
+          </Link>
+          <Link
+            to="/lesson/$id"
+            params={{ id: "1" }}
+            className="inline-flex h-11 items-center rounded-md bg-primary px-4 text-sm text-primary-fg"
+          >
+            進入第 1 課
+          </Link>
+        </div>
       </div>
     </div>
   );

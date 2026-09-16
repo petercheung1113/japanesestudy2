@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  BookMarked,
   BookOpenText,
   ClipboardCheck,
   Headphones,
@@ -45,7 +46,7 @@ function Home() {
         />
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <Link
           to="/start"
           className="paper-card flex items-center justify-between gap-4 rounded-2xl p-5 transition-[transform,box-shadow] duration-200 hover:shadow-lift"
@@ -61,9 +62,23 @@ function Home() {
         </Link>
 
         <Link
+          to="/ref"
+          className="paper-card flex items-center justify-between gap-4 rounded-2xl p-5 transition-[transform,box-shadow] duration-200 hover:shadow-lift"
+        >
+          <div>
+            <p className="text-xs font-medium tracking-wide text-primary">補充資料</p>
+            <p className="mt-1 font-display text-2xl text-ink">時刻・日期・動詞</p>
+            <p className="mt-1 text-sm text-muted">時分、月日、錢、星期、一／二／三類活用</p>
+          </div>
+          <span className="grid size-11 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">
+            <BookMarked className="size-5" />
+          </span>
+        </Link>
+
+        <Link
           to="/lesson/$id"
           params={{ id: String(continueLesson.id) }}
-          className="paper-card flex items-center justify-between gap-4 rounded-2xl p-5 transition-[transform,box-shadow] duration-200 hover:shadow-lift"
+          className="paper-card flex items-center justify-between gap-4 rounded-2xl p-5 transition-[transform,box-shadow] duration-200 hover:shadow-lift sm:col-span-2 lg:col-span-1"
         >
           <div>
             <p className="text-xs font-medium tracking-wide text-primary">繼續學習</p>
